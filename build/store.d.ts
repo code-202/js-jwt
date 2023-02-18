@@ -17,12 +17,12 @@ export interface Informations {
     username: string;
 }
 export declare abstract class Store<T extends Informations> implements Request.AuthorizationService {
-    protected _apiEndpoint: string;
-    protected _apiPublicKey: string;
-    protected _request: TokenRequest;
     status: Request.Status;
     token: string;
     informations: T;
+    protected _apiEndpoint: string;
+    protected _apiPublicKey: string;
+    protected _request: TokenRequest;
     protected _cookies: Cookies;
     protected _refreshToken: RefreshTokenRequest;
     protected _requestLogout: LogoutRequest;

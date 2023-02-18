@@ -1,4 +1,4 @@
-import { action, observable, computed, when } from 'mobx'
+import { makeObservable, action, observable, computed } from 'mobx'
 import { TokenRequest } from './token-request'
 import { RefreshTokenRequest } from './refresh-token-request'
 import { LogoutRequest } from './logout-request'
@@ -22,12 +22,13 @@ export interface Informations {
 }
 
 export abstract class Store<T extends Informations> implements Request.AuthorizationService{
+    public status: Request.Status
+    public token: string
+    public informations: T
+
     protected _apiEndpoint: string
     protected _apiPublicKey: string
     protected _request: TokenRequest
-    @observable status: Request.Status = 'waiting'
-    @observable token: string = ''
-    @observable informations: T
     protected _cookies: Cookies
     protected _refreshToken: RefreshTokenRequest
     protected _requestLogout: LogoutRequest
@@ -35,6 +36,22 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _cookieOptionsDomain: string
 
     constructor (options: Options) {
+        makeObservable <Store<T>, 'eraseCredentials' | 'updateToken'> (this, {
+            status: observable,
+            token: observable,
+            informations: observable,
+
+            connected: computed,
+
+            login: action,
+            logout: action,
+            eraseCredentials: action,
+            updateToken: action,
+        })
+
+        this.status = 'waiting'
+        this.token = ''
+
         this._apiEndpoint = options.endpoint
         this._apiPublicKey = options.publicKey
 
@@ -78,12 +95,10 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    @computed
     public get connected (): boolean {
         return this.token !== ''
     }
 
-    @action
     public login (username: string, password: string, rememberMe: boolean = false): Promise<any> {
         if (this.status === 'pending') {
             return new Promise((resolve, reject) => {
@@ -98,7 +113,6 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         })
     }
 
-    @action
     public logout (): Promise<void> {
         return new Promise((resolve, reject) => {
             if (this._notifyLogout) {
@@ -130,7 +144,6 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this.eraseCredentials()
     }
 
-    @action
     protected eraseCredentials () {
         this.token = ''
         this.informations = this.createInformations()
@@ -210,7 +223,6 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         })
     }
 
-    @action
     protected updateToken (token: string, decoded: Informations, andSave: boolean = true, rememberMe: boolean = false) {
         this.token = token
         this.informations = Object.assign(this.informations, decoded)

@@ -15,12 +15,6 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -40,18 +34,30 @@ const logout_request_1 = require("./logout-request");
 const jwt = __importStar(require("jsonwebtoken"));
 const universal_cookie_1 = __importDefault(require("universal-cookie"));
 class Store {
+    status;
+    token;
+    informations;
     _apiEndpoint;
     _apiPublicKey;
     _request;
-    status = 'waiting';
-    token = '';
-    informations;
     _cookies;
     _refreshToken;
     _requestLogout;
     _notifyLogout = true;
     _cookieOptionsDomain;
     constructor(options) {
+        (0, mobx_1.makeObservable)(this, {
+            status: mobx_1.observable,
+            token: mobx_1.observable,
+            informations: mobx_1.observable,
+            connected: mobx_1.computed,
+            login: mobx_1.action,
+            logout: mobx_1.action,
+            eraseCredentials: mobx_1.action,
+            updateToken: mobx_1.action,
+        });
+        this.status = 'waiting';
+        this.token = '';
         this._apiEndpoint = options.endpoint;
         this._apiPublicKey = options.publicKey;
         this.informations = this.createInformations();
@@ -229,28 +235,4 @@ class Store {
         }
     }
 }
-__decorate([
-    mobx_1.observable
-], Store.prototype, "status", void 0);
-__decorate([
-    mobx_1.observable
-], Store.prototype, "token", void 0);
-__decorate([
-    mobx_1.observable
-], Store.prototype, "informations", void 0);
-__decorate([
-    mobx_1.computed
-], Store.prototype, "connected", null);
-__decorate([
-    mobx_1.action
-], Store.prototype, "login", null);
-__decorate([
-    mobx_1.action
-], Store.prototype, "logout", null);
-__decorate([
-    mobx_1.action
-], Store.prototype, "eraseCredentials", null);
-__decorate([
-    mobx_1.action
-], Store.prototype, "updateToken", null);
 exports.Store = Store;
