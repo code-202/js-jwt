@@ -23,9 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KeyBuilder = exports.KeyProvider = exports.Store = void 0;
+exports.TokenVerifier = exports.KeyBuilder = exports.KeyProvider = exports.Store = void 0;
 var store_1 = require("./store");
 Object.defineProperty(exports, "Store", { enumerable: true, get: function () { return store_1.Store; } });
 var key_provider_1 = require("./key-provider");
 Object.defineProperty(exports, "KeyProvider", { enumerable: true, get: function () { return key_provider_1.KeyProvider; } });
 exports.KeyBuilder = __importStar(require("./key-builder"));
+var token_verifier_1 = require("./token-verifier");
+Object.defineProperty(exports, "TokenVerifier", { enumerable: true, get: function () { return token_verifier_1.TokenVerifier; } });
