@@ -1,14 +1,13 @@
 import { makeObservable, action, observable, computed } from 'mobx'
+import { TokenVerifier, Result } from './token-verifier'
 import { TokenRequest } from './token-request'
 import { RefreshTokenRequest } from './refresh-token-request'
 import { LogoutRequest } from './logout-request'
 import { Request, Response } from 'rich-agent'
-import * as jwt from 'jsonwebtoken'
 import Cookies, { CookieSetOptions } from 'universal-cookie'
 
 export interface Options {
     endpoint: string
-    publicKey: string
     notifyLogout?: boolean
     cookieOptions?: {
         domain?: string
@@ -27,7 +26,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     public informations: T
 
     protected _apiEndpoint: string
-    protected _apiPublicKey: string
+    protected _tokenVerifier: TokenVerifier
     protected _request: TokenRequest
     protected _cookies: Cookies
     protected _refreshToken: RefreshTokenRequest
@@ -35,7 +34,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _notifyLogout: boolean = true
     protected _cookieOptionsDomain: string
 
-    constructor (options: Options) {
+    constructor (tokenVerifier: TokenVerifier, options: Options) {
         makeObservable <Store<T>, 'eraseCredentials' | 'updateToken'> (this, {
             status: observable,
             token: observable,
@@ -52,17 +51,18 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this.status = 'waiting'
         this.token = ''
 
+        this._tokenVerifier = tokenVerifier
+
         this._apiEndpoint = options.endpoint
-        this._apiPublicKey = options.publicKey
 
         this.informations = this.createInformations()
 
-        this._request = new TokenRequest(options.endpoint, options.publicKey)
+        this._request = new TokenRequest(options.endpoint, tokenVerifier)
         this._request.onStatusChange(action((status: Request.Status) => {
             this.status = status
         }))
 
-        this._refreshToken = new RefreshTokenRequest(options.endpoint, options.publicKey)
+        this._refreshToken = new RefreshTokenRequest(options.endpoint, tokenVerifier)
         this._requestLogout = new LogoutRequest(options.endpoint)
 
         this._cookies = new Cookies()
@@ -158,14 +158,16 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    public loadTokenFromString (token: string) {
+    public async loadTokenFromString (token: string) {
         if (token) {
             try {
-                const decoded = jwt.verify(token, this._apiPublicKey)
-                if (decoded) {
-                    this.token = token
-                    this.informations = Object.assign(this.informations, decoded)
-                    this.refreshTokenIfItNeed()
+                const { payload, protectedHeader } = await this._tokenVerifier.verify(token)
+                if (payload) {
+                    action(() => {
+                        this.token = token
+                        this.informations = Object.assign(this.informations, payload)
+                        this.refreshTokenIfItNeed()
+                    })()
                 }
             } catch (error) {
                 // do nothing
@@ -243,7 +245,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         return now > limit
     }
 
-    protected loadTokenFromUrl () {
+    protected async loadTokenFromUrl () {
         if (typeof location === 'undefined') {
             return
         }
@@ -256,11 +258,13 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
 
             if (token) {
                 try {
-                    const decoded = jwt.verify(token, this._apiPublicKey)
-                    if (decoded) {
-                        this.token = token
-                        this.informations = Object.assign(this.informations, decoded)
-                        this.refreshTokenIfItNeed()
+                    const { payload, protectedHeader } = await this._tokenVerifier.verify(token)
+                    if (payload) {
+                        action(() => {
+                            this.token = token
+                            this.informations = Object.assign(this.informations, payload)
+                            this.refreshTokenIfItNeed()
+                        })()
                     }
                 } catch (error) {
                     // do nothing

@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -31,21 +8,20 @@ const mobx_1 = require("mobx");
 const token_request_1 = require("./token-request");
 const refresh_token_request_1 = require("./refresh-token-request");
 const logout_request_1 = require("./logout-request");
-const jwt = __importStar(require("jsonwebtoken"));
 const universal_cookie_1 = __importDefault(require("universal-cookie"));
 class Store {
     status;
     token;
     informations;
     _apiEndpoint;
-    _apiPublicKey;
+    _tokenVerifier;
     _request;
     _cookies;
     _refreshToken;
     _requestLogout;
     _notifyLogout = true;
     _cookieOptionsDomain;
-    constructor(options) {
+    constructor(tokenVerifier, options) {
         (0, mobx_1.makeObservable)(this, {
             status: mobx_1.observable,
             token: mobx_1.observable,
@@ -58,14 +34,14 @@ class Store {
         });
         this.status = 'waiting';
         this.token = '';
+        this._tokenVerifier = tokenVerifier;
         this._apiEndpoint = options.endpoint;
-        this._apiPublicKey = options.publicKey;
         this.informations = this.createInformations();
-        this._request = new token_request_1.TokenRequest(options.endpoint, options.publicKey);
+        this._request = new token_request_1.TokenRequest(options.endpoint, tokenVerifier);
         this._request.onStatusChange((0, mobx_1.action)((status) => {
             this.status = status;
         }));
-        this._refreshToken = new refresh_token_request_1.RefreshTokenRequest(options.endpoint, options.publicKey);
+        this._refreshToken = new refresh_token_request_1.RefreshTokenRequest(options.endpoint, tokenVerifier);
         this._requestLogout = new logout_request_1.LogoutRequest(options.endpoint);
         this._cookies = new universal_cookie_1.default();
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true;
@@ -142,14 +118,16 @@ class Store {
             rememberMe: rememberMe
         };
     }
-    loadTokenFromString(token) {
+    async loadTokenFromString(token) {
         if (token) {
             try {
-                const decoded = jwt.verify(token, this._apiPublicKey);
-                if (decoded) {
-                    this.token = token;
-                    this.informations = Object.assign(this.informations, decoded);
-                    this.refreshTokenIfItNeed();
+                const { payload, protectedHeader } = await this._tokenVerifier.verify(token);
+                if (payload) {
+                    (0, mobx_1.action)(() => {
+                        this.token = token;
+                        this.informations = Object.assign(this.informations, payload);
+                        this.refreshTokenIfItNeed();
+                    })();
                 }
             }
             catch (error) {
@@ -211,7 +189,7 @@ class Store {
         const limit = this.informations.iat + (this.informations.exp - this.informations.iat) / 2;
         return now > limit;
     }
-    loadTokenFromUrl() {
+    async loadTokenFromUrl() {
         if (typeof location === 'undefined') {
             return;
         }
@@ -221,11 +199,13 @@ class Store {
             const token = decodeURIComponent(results[1].replace(/\+/g, ' '));
             if (token) {
                 try {
-                    const decoded = jwt.verify(token, this._apiPublicKey);
-                    if (decoded) {
-                        this.token = token;
-                        this.informations = Object.assign(this.informations, decoded);
-                        this.refreshTokenIfItNeed();
+                    const { payload, protectedHeader } = await this._tokenVerifier.verify(token);
+                    if (payload) {
+                        (0, mobx_1.action)(() => {
+                            this.token = token;
+                            this.informations = Object.assign(this.informations, payload);
+                            this.refreshTokenIfItNeed();
+                        })();
                     }
                 }
                 catch (error) {
