@@ -23,17 +23,53 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TokenVerifier = void 0;
+exports.JWKBuilder = exports.PKCS8Builder = exports.X509Builder = exports.SPKIBuilder = void 0;
 const jose = __importStar(require("jose"));
-class TokenVerifier {
-    provider;
-    constructor(provider) {
-        this.provider = provider;
+class SPKIBuilder {
+    spki;
+    alg;
+    constructor(spki, alg) {
+        this.spki = spki;
+        this.alg = alg;
     }
-    verify(token) {
-        return this.provider.promise.then((key) => {
-            return jose.jwtVerify(token, key);
-        });
+    build() {
+        return jose.importSPKI(this.spki, this.alg);
     }
 }
-exports.TokenVerifier = TokenVerifier;
+exports.SPKIBuilder = SPKIBuilder;
+class X509Builder {
+    x509;
+    alg;
+    constructor(x509, alg) {
+        this.x509 = x509;
+        this.alg = alg;
+    }
+    build() {
+        return jose.importX509(this.x509, this.alg);
+    }
+}
+exports.X509Builder = X509Builder;
+class PKCS8Builder {
+    pkcs8;
+    alg;
+    constructor(pkcs8, alg) {
+        this.pkcs8 = pkcs8;
+        this.alg = alg;
+    }
+    build() {
+        return jose.importPKCS8(this.pkcs8, this.alg);
+    }
+}
+exports.PKCS8Builder = PKCS8Builder;
+class JWKBuilder {
+    jwk;
+    alg;
+    constructor(jwk, alg) {
+        this.jwk = jwk;
+        this.alg = alg;
+    }
+    build() {
+        return jose.importJWK(this.jwk, this.alg);
+    }
+}
+exports.JWKBuilder = JWKBuilder;

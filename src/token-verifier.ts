@@ -1,16 +1,20 @@
 import * as jose from 'jose'
+import { KeyProvider } from './key-provider'
+import { Key } from './key-builder'
 
 export class TokenVerifier
 {
-    private key: jose.KeyLike
+    private provider: KeyProvider
 
-    constructor (key: jose.KeyLike) {
-        this.key = key
+    constructor (provider: KeyProvider) {
+        this.provider = provider
     }
 
     public verify(token: string): Promise<Result>
     {
-        return jose.jwtVerify(token, this.key)
+        return this.provider.promise.then((key: Key) => {
+            return jose.jwtVerify(token, key)
+        })
     }
 }
 
