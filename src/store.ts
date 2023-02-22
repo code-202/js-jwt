@@ -272,4 +272,24 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
             }
         }
     }
+
+    public serialize(): Record<string, any> {
+        return {
+            status: this.status,
+            token: this.token,
+            informations: this.informations,
+        }
+    }
+
+    public deserialize(data: Record<string, any>): void {
+        try {
+            action(() => {
+                this.status = data.status
+                this.token = data.token
+                this.informations = data.informations
+            })()
+        } catch (e) {
+            console.error('Impossible to deserialize : bad data')
+        }
+    }
 }

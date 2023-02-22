@@ -214,5 +214,24 @@ class Store {
             }
         }
     }
+    serialize() {
+        return {
+            status: this.status,
+            token: this.token,
+            informations: this.informations,
+        };
+    }
+    deserialize(data) {
+        try {
+            (0, mobx_1.action)(() => {
+                this.status = data.status;
+                this.token = data.token;
+                this.informations = data.informations;
+            })();
+        }
+        catch (e) {
+            console.error('Impossible to deserialize : bad data');
+        }
+    }
 }
 exports.Store = Store;

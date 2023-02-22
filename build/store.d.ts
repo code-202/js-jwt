@@ -48,4 +48,6 @@ export declare abstract class Store<T extends Informations> implements Request.A
     protected updateToken(token: string, decoded: Informations, andSave?: boolean, rememberMe?: boolean): void;
     protected tokenHasToBeRefreshed(): boolean;
     protected loadTokenFromUrl(): Promise<void>;
+    serialize(): Record<string, any>;
+    deserialize(data: Record<string, any>): void;
 }
