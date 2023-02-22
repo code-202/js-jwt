@@ -5,7 +5,7 @@ export class RefreshTokenRequest extends ApiRequest {
     protected _tokenVerifier: TokenVerifier
 
     constructor (apiEndpoint: string, tokenVerifier: TokenVerifier) {
-        super(apiEndpoint + '/security/refresh', 'POST')
+        super(apiEndpoint + '/security/refresh', 'GET')
 
         this._tokenVerifier = tokenVerifier
     }

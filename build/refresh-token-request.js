@@ -5,7 +5,7 @@ const rich_agent_1 = require("rich-agent");
 class RefreshTokenRequest extends rich_agent_1.ApiRequest {
     _tokenVerifier;
     constructor(apiEndpoint, tokenVerifier) {
-        super(apiEndpoint + '/security/refresh', 'POST');
+        super(apiEndpoint + '/security/refresh', 'GET');
         this._tokenVerifier = tokenVerifier;
     }
     transformResponseData(data) {
