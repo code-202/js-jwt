@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@code-202/agent": "^3.2.1",
-    "jose": "^4.12.2",
+    "jose": "^4.13.1",
     "mobx": "^6.8.0",
     "universal-cookie": "^4.0.4"
   }
