@@ -2,7 +2,7 @@ import { TokenVerifier } from './token-verifier';
 import { TokenRequest } from './token-request';
 import { RefreshTokenRequest } from './refresh-token-request';
 import { LogoutRequest } from './logout-request';
-import { Request } from 'rich-agent';
+import { Request } from '@code-202/agent';
 import Cookies from 'universal-cookie';
 export interface Options {
     endpoint: string;

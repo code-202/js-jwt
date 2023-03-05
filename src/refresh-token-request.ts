@@ -1,4 +1,4 @@
-import { ApiRequest } from 'rich-agent'
+import { ApiRequest } from '@code-202/agent'
 import { TokenVerifier, Result } from './token-verifier'
 
 export class RefreshTokenRequest extends ApiRequest {

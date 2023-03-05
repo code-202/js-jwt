@@ -299,6 +299,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@code-202/agent@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@code-202/agent/-/agent-3.2.1.tgz#1f72c0cf66ca156c1a38404af5769edd78171373"
+  integrity sha512-RLJBqQOWjAR+xCqpy5XbC2kmk9vCff3zF0WjPAeA744pcTk8JNZ3gXu+pHXOTAF+lPphDzaJOID20uDSQEAVKA==
+  dependencies:
+    superagent "^8.0.9"
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -2753,13 +2760,6 @@ reusify@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
-
-rich-agent@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/rich-agent/-/rich-agent-3.1.1.tgz#9f203435010d1889d24001099b0baa0588844e80"
-  integrity sha512-83enGQVv1+6mW/MwjYsfjZ58m4/c2PXt7uwVVBSPzTMGgut/zXm/UG+apvSRtnVccJ9+umLA4ONYs6lOOpSt+g==
-  dependencies:
-    superagent "^8.0.9"
 
 rimraf@^3.0.2:
   version "3.0.2"

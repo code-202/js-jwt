@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TokenRequest = void 0;
-const rich_agent_1 = require("rich-agent");
-class TokenRequest extends rich_agent_1.ApiRequest {
+const agent_1 = require("@code-202/agent");
+class TokenRequest extends agent_1.ApiRequest {
     _tokenVerifier;
     constructor(apiEndpoint, tokenVerifier) {
         super(apiEndpoint + '/login_check', 'POST');
