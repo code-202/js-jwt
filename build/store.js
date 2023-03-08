@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Store = void 0;
 const mobx_1 = require("mobx");
-const token_request_1 = require("./token-request");
-const refresh_token_request_1 = require("./refresh-token-request");
-const logout_request_1 = require("./logout-request");
 const universal_cookie_1 = __importDefault(require("universal-cookie"));
+const logout_request_1 = require("./logout-request");
+const refresh_token_request_1 = require("./refresh-token-request");
+const token_request_1 = require("./token-request");
 class Store {
     status;
     token;
@@ -214,14 +214,14 @@ class Store {
             }
         }
     }
-    serialize() {
+    normalize() {
         return {
             status: this.status,
             token: this.token,
             informations: this.informations,
         };
     }
-    deserialize(data) {
+    denormalize(data) {
         try {
             (0, mobx_1.action)(() => {
                 this.status = data.status;

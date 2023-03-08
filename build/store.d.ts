@@ -1,9 +1,10 @@
-import { TokenVerifier } from './token-verifier';
-import { TokenRequest } from './token-request';
-import { RefreshTokenRequest } from './refresh-token-request';
-import { LogoutRequest } from './logout-request';
 import { Request } from '@code-202/agent';
+import { Denormalizable, Normalizable } from '@code-202/serializer';
 import Cookies from 'universal-cookie';
+import { LogoutRequest } from './logout-request';
+import { RefreshTokenRequest } from './refresh-token-request';
+import { TokenRequest } from './token-request';
+import { TokenVerifier } from './token-verifier';
 export interface Options {
     endpoint: string;
     notifyLogout?: boolean;
@@ -16,7 +17,7 @@ export interface Informations {
     exp: number;
     username: string;
 }
-export declare abstract class Store<T extends Informations> implements Request.AuthorizationService {
+export declare abstract class Store<T extends Informations> implements Request.AuthorizationService, Normalizable<StoreNormalized<T>>, Denormalizable<StoreNormalized<T>> {
     status: Request.Status;
     token: string;
     informations: T;
@@ -48,6 +49,11 @@ export declare abstract class Store<T extends Informations> implements Request.A
     protected updateToken(token: string, decoded: Informations, andSave?: boolean, rememberMe?: boolean): void;
     protected tokenHasToBeRefreshed(): boolean;
     protected loadTokenFromUrl(): Promise<void>;
-    serialize(): Record<string, any>;
-    deserialize(data: Record<string, any>): void;
+    normalize(): StoreNormalized<T>;
+    denormalize(data: StoreNormalized<T>): void;
+}
+export interface StoreNormalized<T> {
+    status: Request.Status;
+    token: string;
+    informations: T;
 }

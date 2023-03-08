@@ -2,7 +2,7 @@
 
 console: ## Launch zsh in docker container with PHP
 	docker run \
-		--name=mobx-jwt_console \
+		--name=js-jwt_console \
 		--volume=$(shell pwd):/srv \
 		--volume=$$DEV/.home-developer:/home/developer \
 		--env USERNAME=$(shell whoami) \
