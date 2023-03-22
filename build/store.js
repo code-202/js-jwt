@@ -4,10 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Store = void 0;
+const agent_1 = require("@code-202/agent");
 const mobx_1 = require("mobx");
 const universal_cookie_1 = __importDefault(require("universal-cookie"));
-const logout_request_1 = require("./logout-request");
-const refresh_token_request_1 = require("./refresh-token-request");
 const token_request_1 = require("./token-request");
 class Store {
     status;
@@ -37,12 +36,12 @@ class Store {
         this._tokenVerifier = tokenVerifier;
         this._apiEndpoint = options.endpoint;
         this.informations = this.createInformations();
-        this._request = new token_request_1.TokenRequest(options.endpoint, tokenVerifier);
+        this._request = new token_request_1.TokenRequest(options.endpoint + (options.urls?.login || '/login_check'), 'POST', tokenVerifier);
         this._request.onStatusChange((0, mobx_1.action)((status) => {
             this.status = status;
         }));
-        this._refreshToken = new refresh_token_request_1.RefreshTokenRequest(options.endpoint, tokenVerifier);
-        this._requestLogout = new logout_request_1.LogoutRequest(options.endpoint);
+        this._refreshToken = new token_request_1.TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier);
+        this._requestLogout = new agent_1.ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST');
         this._cookies = new universal_cookie_1.default();
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true;
         this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : '';

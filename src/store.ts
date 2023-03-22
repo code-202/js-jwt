@@ -1,9 +1,7 @@
-import { Request, Response } from '@code-202/agent'
+import { Request, Response, ApiRequest } from '@code-202/agent'
 import { Denormalizable, Normalizable } from '@code-202/serializer'
 import { action, computed, makeObservable, observable } from 'mobx'
 import Cookies, { CookieSetOptions } from 'universal-cookie'
-import { LogoutRequest } from './logout-request'
-import { RefreshTokenRequest } from './refresh-token-request'
 import { TokenRequest } from './token-request'
 import { TokenVerifier } from './token-verifier'
 
@@ -12,6 +10,11 @@ export interface Options {
     notifyLogout?: boolean
     cookieOptions?: {
         domain?: string
+    }
+    urls?: {
+        login?: string //'/login_check'
+        refreshToken?: string //'/security/refresh'
+        logout?: string //'/logout'
     }
 }
 
@@ -30,8 +33,8 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _tokenVerifier: TokenVerifier
     protected _request: TokenRequest
     protected _cookies: Cookies
-    protected _refreshToken: RefreshTokenRequest
-    protected _requestLogout: LogoutRequest
+    protected _refreshToken: TokenRequest
+    protected _requestLogout: ApiRequest
     protected _notifyLogout: boolean = true
     protected _cookieOptionsDomain: string
 
@@ -58,13 +61,13 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
 
         this.informations = this.createInformations()
 
-        this._request = new TokenRequest(options.endpoint, tokenVerifier)
+        this._request = new TokenRequest(options.endpoint + (options.urls?.login || '/login_check'), 'POST', tokenVerifier)
         this._request.onStatusChange(action((status: Request.Status) => {
             this.status = status
         }))
 
-        this._refreshToken = new RefreshTokenRequest(options.endpoint, tokenVerifier)
-        this._requestLogout = new LogoutRequest(options.endpoint)
+        this._refreshToken = new TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier)
+        this._requestLogout = new ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST')
 
         this._cookies = new Cookies()
 

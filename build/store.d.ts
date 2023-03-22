@@ -1,8 +1,6 @@
-import { Request } from '@code-202/agent';
+import { Request, ApiRequest } from '@code-202/agent';
 import { Denormalizable, Normalizable } from '@code-202/serializer';
 import Cookies from 'universal-cookie';
-import { LogoutRequest } from './logout-request';
-import { RefreshTokenRequest } from './refresh-token-request';
 import { TokenRequest } from './token-request';
 import { TokenVerifier } from './token-verifier';
 export interface Options {
@@ -10,6 +8,11 @@ export interface Options {
     notifyLogout?: boolean;
     cookieOptions?: {
         domain?: string;
+    };
+    urls?: {
+        login?: string;
+        refreshToken?: string;
+        logout?: string;
     };
 }
 export interface Informations {
@@ -25,8 +28,8 @@ export declare abstract class Store<T extends Informations> implements Request.A
     protected _tokenVerifier: TokenVerifier;
     protected _request: TokenRequest;
     protected _cookies: Cookies;
-    protected _refreshToken: RefreshTokenRequest;
-    protected _requestLogout: LogoutRequest;
+    protected _refreshToken: TokenRequest;
+    protected _requestLogout: ApiRequest;
     protected _notifyLogout: boolean;
     protected _cookieOptionsDomain: string;
     constructor(tokenVerifier: TokenVerifier, options: Options);

@@ -1,11 +1,11 @@
-import { ApiRequest } from '@code-202/agent'
+import { ApiRequest, Request } from '@code-202/agent'
 import { TokenVerifier, Result } from './token-verifier'
 
 export class TokenRequest extends ApiRequest {
     protected _tokenVerifier: TokenVerifier
 
-    constructor (apiEndpoint: string, tokenVerifier: TokenVerifier) {
-        super(apiEndpoint + '/login_check', 'POST')
+    constructor (url: string, method: Request.Method, tokenVerifier: TokenVerifier) {
+        super(url, method)
 
         this._tokenVerifier = tokenVerifier
     }

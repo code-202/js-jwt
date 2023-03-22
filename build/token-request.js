@@ -4,8 +4,8 @@ exports.TokenRequest = void 0;
 const agent_1 = require("@code-202/agent");
 class TokenRequest extends agent_1.ApiRequest {
     _tokenVerifier;
-    constructor(apiEndpoint, tokenVerifier) {
-        super(apiEndpoint + '/login_check', 'POST');
+    constructor(url, method, tokenVerifier) {
+        super(url, method);
         this._tokenVerifier = tokenVerifier;
     }
     transformResponseData(data) {
