@@ -41,7 +41,7 @@ class Store {
             this.status = status;
         }));
         this._refreshToken = new token_request_1.TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier);
-        this._requestLogout = new agent_1.ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST');
+        this._requestLogout = new agent_1.ApiRequest(options.endpoint + (options.urls?.logout || '/security/logout'), 'POST');
         this._cookies = new universal_cookie_1.default();
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true;
         this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : '';
