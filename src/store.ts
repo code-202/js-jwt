@@ -67,7 +67,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }))
 
         this._refreshToken = new TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier)
-        this._requestLogout = new ApiRequest(options.endpoint + (options.urls?.logout || '/security/logout'), 'POST')
+        this._requestLogout = new ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST')
 
         this._cookies = new Cookies()
 
