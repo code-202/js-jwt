@@ -62,6 +62,8 @@ class Store {
             this.eraseCredentials();
         }
     }
+    onAccessDeniedError(responseStatus, responseTextStatus, data) {
+    }
     get connected() {
         return this.token !== '';
     }

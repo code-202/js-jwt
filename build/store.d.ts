@@ -38,6 +38,7 @@ export declare abstract class Store<T extends Informations> implements Request.A
     get authorizationToken(): string;
     get authorizationPrefix(): string;
     onAuthorizationError(responseStatus: any | null, responseTextStatus: any | null): void;
+    onAccessDeniedError(responseStatus: any | null, responseTextStatus: any | null, data: any | null): void;
     get connected(): boolean;
     login(username: string, password: string, rememberMe?: boolean): Promise<any>;
     logout(): Promise<void>;

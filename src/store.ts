@@ -99,6 +99,10 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
+    public onAccessDeniedError (responseStatus: any | null, responseTextStatus: any | null, data: any | null): void {
+        console.error('access-denied')
+    }
+
     public get connected (): boolean {
         return this.token !== ''
     }
