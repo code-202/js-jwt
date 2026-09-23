@@ -9,18 +9,8 @@ const mobx_1 = require("mobx");
 const universal_cookie_1 = __importDefault(require("universal-cookie"));
 const token_request_1 = require("./token-request");
 class Store {
-    status;
-    token;
-    informations;
-    _apiEndpoint;
-    _tokenVerifier;
-    _request;
-    _cookies;
-    _refreshToken;
-    _requestLogout;
-    _notifyLogout = true;
-    _cookieOptionsDomain;
     constructor(tokenVerifier, options) {
+        this._notifyLogout = true;
         (0, mobx_1.makeObservable)(this, {
             status: mobx_1.observable,
             token: mobx_1.observable,
@@ -63,6 +53,7 @@ class Store {
         }
     }
     onAccessDeniedError(responseStatus, responseTextStatus, data) {
+        console.error('access-denied');
     }
     get connected() {
         return this.token !== '';
@@ -196,7 +187,7 @@ class Store {
         }
         const regex = new RegExp('[\\?&]token=([^&#]*)');
         const results = regex.exec(location.search);
-        if (results !== null) {
+        if (results !== null && results[1] !== undefined) {
             const token = decodeURIComponent(results[1].replace(/\+/g, ' '));
             if (token) {
                 try {
@@ -236,3 +227,4 @@ class Store {
     }
 }
 exports.Store = Store;
+//# sourceMappingURL=store.js.map

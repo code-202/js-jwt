@@ -1,5 +1,5 @@
-import * as jose from 'jose';
-export type Key = jose.KeyLike | Uint8Array;
+import { CryptoKey, JWK } from 'jose';
+export type Key = CryptoKey | Uint8Array;
 export interface KeyBuilder {
     build(): Promise<Key>;
 }
@@ -22,8 +22,9 @@ export declare class PKCS8Builder implements KeyBuilder {
     build(): Promise<Key>;
 }
 export declare class JWKBuilder implements KeyBuilder {
-    protected jwk: jose.JWK;
+    protected jwk: JWK;
     protected alg: string;
-    constructor(jwk: jose.JWK, alg: string);
+    constructor(jwk: JWK, alg: string);
     build(): Promise<Key>;
 }
+//# sourceMappingURL=key-builder.d.ts.map

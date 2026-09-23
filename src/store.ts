@@ -38,8 +38,8 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _notifyLogout: boolean = true
     protected _cookieOptionsDomain: string
 
-    constructor (tokenVerifier: TokenVerifier, options: Options) {
-        makeObservable <Store<T>, 'eraseCredentials' | 'updateToken'> (this, {
+    constructor(tokenVerifier: TokenVerifier, options: Options) {
+        makeObservable<Store<T>, 'eraseCredentials' | 'updateToken'>(this, {
             status: observable,
             token: observable,
             informations: observable,
@@ -81,33 +81,33 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
 
     protected abstract createInformations(): T
 
-    public get endpoint (): string {
+    public get endpoint(): string {
         return this._apiEndpoint
     }
 
-    public get authorizationToken (): string {
+    public get authorizationToken(): string {
         return this.token
     }
 
-    public get authorizationPrefix (): string {
+    public get authorizationPrefix(): string {
         return 'Bearer'
     }
 
-    public onAuthorizationError (responseStatus: any | null, responseTextStatus: any | null): void {
-        if( responseStatus === 401) {
+    public onAuthorizationError(responseStatus: any | null, responseTextStatus: any | null): void {
+        if (responseStatus === 401) {
             this.eraseCredentials()
         }
     }
 
-    public onAccessDeniedError (responseStatus: any | null, responseTextStatus: any | null, data: any | null): void {
+    public onAccessDeniedError(responseStatus: any | null, responseTextStatus: any | null, data: any | null): void {
         console.error('access-denied')
     }
 
-    public get connected (): boolean {
+    public get connected(): boolean {
         return this.token !== ''
     }
 
-    public login (username: string, password: string, rememberMe: boolean = false): Promise<any> {
+    public login(username: string, password: string, rememberMe: boolean = false): Promise<any> {
         if (this.status === 'pending') {
             return new Promise((resolve, reject) => {
                 reject()
@@ -115,13 +115,13 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
 
         return this._request.send(this.buildLoginData(username, password, rememberMe))
-        .then((response: Response.Response) => {
-            this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe)
-            return response
-        })
+            .then((response: Response.Response) => {
+                this.updateToken(this._request.responseData.token, this._request.responseData.decoded, true, rememberMe)
+                return response
+            })
     }
 
-    public logout (): Promise<void> {
+    public logout(): Promise<void> {
         return new Promise((resolve, reject) => {
             if (this._notifyLogout) {
                 this._requestLogout.addAuthorization(this.token)
@@ -148,17 +148,17 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         })
     }
 
-    public forceLogout () {
+    public forceLogout() {
         this.eraseCredentials()
     }
 
-    protected eraseCredentials () {
+    protected eraseCredentials() {
         this.token = ''
         this.informations = this.createInformations()
         this.deleteTokenCookie()
     }
 
-    protected buildLoginData (username: string, password: string, rememberMe: boolean = false): object {
+    protected buildLoginData(username: string, password: string, rememberMe: boolean = false): object {
         return {
             username: username,
             password: password,
@@ -166,7 +166,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    public async loadTokenFromString (token: string) {
+    public async loadTokenFromString(token: string) {
         if (token) {
             try {
                 const { payload, protectedHeader } = await this._tokenVerifier.verify(token)
@@ -183,7 +183,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    protected loadTokenFromCookie () {
+    protected loadTokenFromCookie() {
         const token = this._cookies.get('api-token')
 
         if (token) {
@@ -191,7 +191,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    protected saveTokenInCookie () {
+    protected saveTokenInCookie() {
         if (this.token) {
             const options: CookieSetOptions = {
                 path: '/',
@@ -207,7 +207,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    protected deleteTokenCookie () {
+    protected deleteTokenCookie() {
         const options: CookieSetOptions = {
             path: '/',
         }
@@ -220,7 +220,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this._cookies.remove('api-token', options)
     }
 
-    protected refreshTokenIfItNeed (): void {
+    protected refreshTokenIfItNeed(): void {
         if (!this.tokenHasToBeRefreshed()) {
             return
         }
@@ -233,7 +233,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         })
     }
 
-    protected updateToken (token: string, decoded: Informations, andSave: boolean = true, rememberMe: boolean = false) {
+    protected updateToken(token: string, decoded: Informations, andSave: boolean = true, rememberMe: boolean = false) {
         this.token = token
         this.informations = Object.assign(this.informations, decoded)
 
@@ -242,7 +242,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    protected tokenHasToBeRefreshed (): boolean {
+    protected tokenHasToBeRefreshed(): boolean {
         if (!this.token) {
             return false
         }
@@ -253,7 +253,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         return now > limit
     }
 
-    protected async loadTokenFromUrl () {
+    protected async loadTokenFromUrl() {
         if (typeof location === 'undefined') {
             return
         }
@@ -261,7 +261,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         const regex = new RegExp('[\\?&]token=([^&#]*)')
         const results = regex.exec(location.search)
 
-        if (results !== null) {
+        if (results !== null && results[1] !== undefined) {
             const token = decodeURIComponent(results[1].replace(/\+/g, ' '))
 
             if (token) {
@@ -281,7 +281,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    public normalize (): StoreNormalized<T> {
+    public normalize(): StoreNormalized<T> {
         return {
             status: this.status,
             token: this.token,
@@ -289,7 +289,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         }
     }
 
-    public denormalize (data: StoreNormalized<T>): void {
+    public denormalize(data: StoreNormalized<T>): void {
         try {
             action(() => {
                 this.status = data.status

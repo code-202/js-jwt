@@ -5,3 +5,4 @@ export declare class TokenRequest extends ApiRequest {
     constructor(url: string, method: Request.Method, tokenVerifier: TokenVerifier);
     protected transformResponseData(data: any): Promise<any>;
 }
+//# sourceMappingURL=token-request.d.ts.map

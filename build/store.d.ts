@@ -61,3 +61,4 @@ export interface StoreNormalized<T> {
     token: string;
     informations: T;
 }
+//# sourceMappingURL=store.d.ts.map

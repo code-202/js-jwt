@@ -1,0 +1,1 @@
+{"version":3,"file":"token-verifier.d.ts","sourceRoot":"","sources":["../src/token-verifier.ts"],"names":[],"mappings":"AAAA,OAAO,EAAa,eAAe,EAAE,MAAM,MAAM,CAAA;AACjD,OAAO,EAAE,WAAW,EAAE,MAAM,gBAAgB,CAAA;AAG5C,qBAAa,aAAa;IACtB,OAAO,CAAC,QAAQ,CAAa;gBAEjB,QAAQ,EAAE,WAAW;IAI1B,MAAM,CAAC,KAAK,EAAE,MAAM,GAAG,OAAO,CAAC,MAAM,CAAC;CAKhD;AAED,MAAM,WAAW,MAAO,SAAQ,eAAe;CAAI"}

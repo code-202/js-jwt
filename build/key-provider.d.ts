@@ -7,3 +7,4 @@ export declare class KeyProvider {
     hasKey(): boolean;
     get promise(): Promise<Key>;
 }
+//# sourceMappingURL=key-provider.d.ts.map

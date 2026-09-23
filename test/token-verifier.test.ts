@@ -2,7 +2,7 @@ import { test, expect, afterAll, beforeAll } from '@jest/globals'
 import { TokenVerifier } from '../src/token-verifier'
 import { KeyProvider } from '../src/key-provider'
 import { SPKIBuilder } from '../src/key-builder'
-import * as jose from 'jose'
+import { errors } from 'jose'
 
 const spki = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2RbCZIlcKwCOS4dnvt2i
@@ -35,6 +35,6 @@ test('exp', async () => {
 
     const tv = new TokenVerifier(provider)
 
-    await expect(tv.verify('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NzY5OTA3MzQsImV4cCI6MTY3Njk5MDczNSwicm9sZXMiOlsiUk9MRV9URVNUIl0sInVzZXJuYW1lIjoidGVzdCJ9.ErxnYerXxIQYgAYMqRT6X1O2Xu5rYk9LD2omwgr0cw_bWdvAzR7KFfeLC13rNiHc1k46aq0M_xtL6ugAqyHl2XH7XDDywPogmjdZ2AEEKM_CZuEh9NdzKtzm2Li6XJ2xVEfqAplFevEF9UbntwpOQCXz0CxtQ56PP725upj_eSeBcMhhMqq4fdzpMkOrkT94szwGoN49igkNzTYb0k5raZ1jm4y6fXD0Gh2hnjDjOFJjKaGUR3BfCHDJkfyk9APDC3KbMSPPKWyHO4K74XIJbVoyjzmqgS6CNYgheBMlpraw7ivQjlri2Rkf9-Bcex3Jwe2I725Qt91-g17E83fQAg')).rejects.toThrow(jose.errors.JWTExpired)
+    await expect(tv.verify('eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2NzY5OTA3MzQsImV4cCI6MTY3Njk5MDczNSwicm9sZXMiOlsiUk9MRV9URVNUIl0sInVzZXJuYW1lIjoidGVzdCJ9.ErxnYerXxIQYgAYMqRT6X1O2Xu5rYk9LD2omwgr0cw_bWdvAzR7KFfeLC13rNiHc1k46aq0M_xtL6ugAqyHl2XH7XDDywPogmjdZ2AEEKM_CZuEh9NdzKtzm2Li6XJ2xVEfqAplFevEF9UbntwpOQCXz0CxtQ56PP725upj_eSeBcMhhMqq4fdzpMkOrkT94szwGoN49igkNzTYb0k5raZ1jm4y6fXD0Gh2hnjDjOFJjKaGUR3BfCHDJkfyk9APDC3KbMSPPKWyHO4K74XIJbVoyjzmqgS6CNYgheBMlpraw7ivQjlri2Rkf9-Bcex3Jwe2I725Qt91-g17E83fQAg')).rejects.toThrow(errors.JWTExpired)
 })
 
