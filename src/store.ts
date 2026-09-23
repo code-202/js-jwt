@@ -39,6 +39,11 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _cookieOptionsDomain: string
 
     constructor(tokenVerifier: TokenVerifier, options: Options) {
+        this.status = 'waiting'
+        this.token = ''
+
+        this.informations = this.createInformations()
+
         makeObservable<Store<T>, 'eraseCredentials' | 'updateToken'>(this, {
             status: observable,
             token: observable,
@@ -52,14 +57,10 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
             updateToken: action,
         })
 
-        this.status = 'waiting'
-        this.token = ''
-
         this._tokenVerifier = tokenVerifier
 
         this._apiEndpoint = options.endpoint
 
-        this.informations = this.createInformations()
 
         this._request = new TokenRequest(options.endpoint + (options.urls?.login || '/login_check'), 'POST', tokenVerifier)
         this._request.onStatusChange(action((status: Request.Status) => {

@@ -11,6 +11,9 @@ const token_request_1 = require("./token-request");
 class Store {
     constructor(tokenVerifier, options) {
         this._notifyLogout = true;
+        this.status = 'waiting';
+        this.token = '';
+        this.informations = this.createInformations();
         (0, mobx_1.makeObservable)(this, {
             status: mobx_1.observable,
             token: mobx_1.observable,
@@ -21,11 +24,8 @@ class Store {
             eraseCredentials: mobx_1.action,
             updateToken: mobx_1.action,
         });
-        this.status = 'waiting';
-        this.token = '';
         this._tokenVerifier = tokenVerifier;
         this._apiEndpoint = options.endpoint;
-        this.informations = this.createInformations();
         this._request = new token_request_1.TokenRequest(options.endpoint + (options.urls?.login || '/login_check'), 'POST', tokenVerifier);
         this._request.onStatusChange((0, mobx_1.action)((status) => {
             this.status = status;

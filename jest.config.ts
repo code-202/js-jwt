@@ -2,7 +2,12 @@ import { defineConfig } from 'jest'
 
 export default defineConfig({
     transform: {
-        '^.+\\.tsx?$': 'ts-jest',
+        '^.+\\.tsx?$': [
+            'ts-jest',
+            {
+                useESM: true,
+            }
+        ],
     },
     testMatch: [
         '**/test/**/*.test.ts'
