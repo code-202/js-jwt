@@ -1,8 +1,9 @@
 import { defineConfig } from 'jest'
+import { TS_EXT_TO_TREAT_AS_ESM, ESM_TS_TRANSFORM_PATTERN } from 'ts-jest'
 
 export default defineConfig({
     transform: {
-        '^.+\\.tsx?$': [
+        [ESM_TS_TRANSFORM_PATTERN]: [
             'ts-jest',
             {
                 useESM: true,
@@ -13,6 +14,6 @@ export default defineConfig({
         '**/test/**/*.test.ts'
     ],
     preset: 'ts-jest/presets/default-esm',
-    extensionsToTreatAsEsm: ['.ts'],
+    extensionsToTreatAsEsm: [...TS_EXT_TO_TREAT_AS_ESM],
     testEnvironment: 'node',
 });

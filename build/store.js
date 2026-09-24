@@ -1,38 +1,42 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Store = void 0;
-const agent_1 = require("@code-202/agent");
-const mobx_1 = require("mobx");
-const universal_cookie_1 = __importDefault(require("universal-cookie"));
-const token_request_1 = require("./token-request");
-class Store {
+import { ApiRequest } from '@code-202/agent';
+import { action, computed, makeObservable, observable } from 'mobx';
+import Cookies from 'universal-cookie';
+import { TokenRequest } from './token-request';
+export class Store {
+    status;
+    token;
+    informations;
+    _apiEndpoint;
+    _tokenVerifier;
+    _request;
+    _cookies;
+    _refreshToken;
+    _requestLogout;
+    _notifyLogout = true;
+    _cookieOptionsDomain;
     constructor(tokenVerifier, options) {
-        this._notifyLogout = true;
         this.status = 'waiting';
         this.token = '';
         this.informations = this.createInformations();
-        (0, mobx_1.makeObservable)(this, {
-            status: mobx_1.observable,
-            token: mobx_1.observable,
-            informations: mobx_1.observable,
-            connected: mobx_1.computed,
-            login: mobx_1.action,
-            logout: mobx_1.action,
-            eraseCredentials: mobx_1.action,
-            updateToken: mobx_1.action,
+        makeObservable(this, {
+            status: observable,
+            token: observable,
+            informations: observable,
+            connected: computed,
+            login: action,
+            logout: action,
+            eraseCredentials: action,
+            updateToken: action,
         });
         this._tokenVerifier = tokenVerifier;
         this._apiEndpoint = options.endpoint;
-        this._request = new token_request_1.TokenRequest(options.endpoint + (options.urls?.login || '/login_check'), 'POST', tokenVerifier);
-        this._request.onStatusChange((0, mobx_1.action)((status) => {
+        this._request = new TokenRequest(options.endpoint + (options.urls?.login || '/login_check'), 'POST', tokenVerifier);
+        this._request.onStatusChange(action((status) => {
             this.status = status;
         }));
-        this._refreshToken = new token_request_1.TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier);
-        this._requestLogout = new agent_1.ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST');
-        this._cookies = new universal_cookie_1.default();
+        this._refreshToken = new TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier);
+        this._requestLogout = new ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST');
+        this._cookies = new Cookies();
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true;
         this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : '';
         this.loadTokenFromCookie();
@@ -115,7 +119,7 @@ class Store {
             try {
                 const { payload, protectedHeader } = await this._tokenVerifier.verify(token);
                 if (payload) {
-                    (0, mobx_1.action)(() => {
+                    action(() => {
                         this.token = token;
                         this.informations = Object.assign(this.informations, payload);
                         this.refreshTokenIfItNeed();
@@ -193,7 +197,7 @@ class Store {
                 try {
                     const { payload, protectedHeader } = await this._tokenVerifier.verify(token);
                     if (payload) {
-                        (0, mobx_1.action)(() => {
+                        action(() => {
                             this.token = token;
                             this.informations = Object.assign(this.informations, payload);
                             this.refreshTokenIfItNeed();
@@ -215,7 +219,7 @@ class Store {
     }
     denormalize(data) {
         try {
-            (0, mobx_1.action)(() => {
+            action(() => {
                 this.status = data.status;
                 this.token = data.token;
                 this.informations = data.informations;
@@ -226,5 +230,4 @@ class Store {
         }
     }
 }
-exports.Store = Store;
 //# sourceMappingURL=store.js.map

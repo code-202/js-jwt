@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TokenRequest = void 0;
-const agent_1 = require("@code-202/agent");
-class TokenRequest extends agent_1.ApiRequest {
+import { ApiRequest } from '@code-202/agent';
+export class TokenRequest extends ApiRequest {
+    _tokenVerifier;
     constructor(url, method, tokenVerifier) {
         super(url, method);
         this._tokenVerifier = tokenVerifier;
@@ -20,5 +18,4 @@ class TokenRequest extends agent_1.ApiRequest {
         });
     }
 }
-exports.TokenRequest = TokenRequest;
 //# sourceMappingURL=token-request.js.map

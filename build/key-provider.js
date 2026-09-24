@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KeyProvider = void 0;
-class KeyProvider {
+export class KeyProvider {
+    _key = null;
+    builder;
     constructor(builder) {
-        this._key = null;
         this.builder = builder;
     }
     get key() {
@@ -24,5 +22,4 @@ class KeyProvider {
         });
     }
 }
-exports.KeyProvider = KeyProvider;
 //# sourceMappingURL=key-provider.js.map
