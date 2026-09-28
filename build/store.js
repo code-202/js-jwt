@@ -36,7 +36,7 @@ export class Store {
         }));
         this._refreshToken = new TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier);
         this._requestLogout = new ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST');
-        this._cookies = new Cookies.default();
+        this._cookies = new Cookies();
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true;
         this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : '';
         this.loadTokenFromCookie();

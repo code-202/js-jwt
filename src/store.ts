@@ -32,7 +32,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _apiEndpoint: string
     protected _tokenVerifier: TokenVerifier
     protected _request: TokenRequest
-    protected _cookies: Cookies.default
+    protected _cookies: Cookies
     protected _refreshToken: TokenRequest
     protected _requestLogout: ApiRequest
     protected _notifyLogout: boolean = true
@@ -70,7 +70,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this._refreshToken = new TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier)
         this._requestLogout = new ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST')
 
-        this._cookies = new Cookies.default()
+        this._cookies = new Cookies()
 
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true
         this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : ''

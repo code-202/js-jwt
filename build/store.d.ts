@@ -27,7 +27,7 @@ export declare abstract class Store<T extends Informations> implements Request.A
     protected _apiEndpoint: string;
     protected _tokenVerifier: TokenVerifier;
     protected _request: TokenRequest;
-    protected _cookies: Cookies.default;
+    protected _cookies: Cookies;
     protected _refreshToken: TokenRequest;
     protected _requestLogout: ApiRequest;
     protected _notifyLogout: boolean;
