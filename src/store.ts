@@ -2,8 +2,8 @@ import { Request, Response, ApiRequest } from '@code-202/agent'
 import { Denormalizable, Normalizable } from '@code-202/serializer'
 import { action, computed, makeObservable, observable } from 'mobx'
 import Cookies, { CookieSetOptions } from 'universal-cookie'
-import { TokenRequest } from './token-request'
-import { TokenVerifier } from './token-verifier'
+import { TokenRequest } from './token-request.js'
+import { TokenVerifier } from './token-verifier.js'
 
 export interface Options {
     endpoint: string
@@ -32,7 +32,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
     protected _apiEndpoint: string
     protected _tokenVerifier: TokenVerifier
     protected _request: TokenRequest
-    protected _cookies: Cookies
+    protected _cookies: Cookies.default
     protected _refreshToken: TokenRequest
     protected _requestLogout: ApiRequest
     protected _notifyLogout: boolean = true
@@ -70,7 +70,7 @@ export abstract class Store<T extends Informations> implements Request.Authoriza
         this._refreshToken = new TokenRequest(options.endpoint + (options.urls?.refreshToken || '/security/refresh'), 'GET', tokenVerifier)
         this._requestLogout = new ApiRequest(options.endpoint + (options.urls?.logout || '/logout'), 'POST')
 
-        this._cookies = new Cookies()
+        this._cookies = new Cookies.default()
 
         this._notifyLogout = options.notifyLogout === undefined || options.notifyLogout === true
         this._cookieOptionsDomain = options.cookieOptions && options.cookieOptions.domain ? options.cookieOptions.domain : ''

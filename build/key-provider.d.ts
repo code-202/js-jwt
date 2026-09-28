@@ -1,4 +1,4 @@
-import { Key, KeyBuilder } from './key-builder';
+import { Key, KeyBuilder } from './key-builder.js';
 export declare class KeyProvider {
     private _key;
     private builder;

@@ -1,7 +1,8 @@
 import { test, expect, afterAll, beforeAll } from '@jest/globals'
-import { TokenVerifier } from '../src/token-verifier'
-import { KeyProvider } from '../src/key-provider'
-import { SPKIBuilder } from '../src/key-builder'
+import { TokenVerifier } from '../build/index.js'
+
+import { KeyProvider } from '../build/key-provider.js'
+import { SPKIBuilder } from '../build/key-builder.js'
 import { errors } from 'jose'
 
 const spki = `-----BEGIN PUBLIC KEY-----

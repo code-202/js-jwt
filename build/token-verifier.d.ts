@@ -1,5 +1,5 @@
 import { JWTVerifyResult } from 'jose';
-import { KeyProvider } from './key-provider';
+import { KeyProvider } from './key-provider.js';
 export declare class TokenVerifier {
     private provider;
     constructor(provider: KeyProvider);

@@ -1,28 +1,23 @@
-import { Key, KeyBuilder } from './key-builder'
+import { Key, KeyBuilder } from './key-builder.js'
 
-export class KeyProvider
-{
+export class KeyProvider {
     private _key: Key | null = null
 
     private builder: KeyBuilder
 
-    constructor (builder: KeyBuilder)
-    {
+    constructor(builder: KeyBuilder) {
         this.builder = builder
     }
 
-    get key (): Key | null
-    {
+    get key(): Key | null {
         return this._key
     }
 
-    hasKey (): boolean
-    {
+    hasKey(): boolean {
         return this._key !== null
     }
 
-    get promise (): Promise<Key>
-    {
+    get promise(): Promise<Key> {
         return new Promise<Key>((resolve) => {
             if (this._key) {
                 resolve(this._key)

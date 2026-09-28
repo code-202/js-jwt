@@ -1,5 +1,5 @@
 import { ApiRequest, Request } from '@code-202/agent';
-import { TokenVerifier } from './token-verifier';
+import { TokenVerifier } from './token-verifier.js';
 export declare class TokenRequest extends ApiRequest {
     protected _tokenVerifier: TokenVerifier;
     constructor(url: string, method: Request.Method, tokenVerifier: TokenVerifier);

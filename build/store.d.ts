@@ -1,8 +1,8 @@
 import { Request, ApiRequest } from '@code-202/agent';
 import { Denormalizable, Normalizable } from '@code-202/serializer';
 import Cookies from 'universal-cookie';
-import { TokenRequest } from './token-request';
-import { TokenVerifier } from './token-verifier';
+import { TokenRequest } from './token-request.js';
+import { TokenVerifier } from './token-verifier.js';
 export interface Options {
     endpoint: string;
     notifyLogout?: boolean;
@@ -27,7 +27,7 @@ export declare abstract class Store<T extends Informations> implements Request.A
     protected _apiEndpoint: string;
     protected _tokenVerifier: TokenVerifier;
     protected _request: TokenRequest;
-    protected _cookies: Cookies;
+    protected _cookies: Cookies.default;
     protected _refreshToken: TokenRequest;
     protected _requestLogout: ApiRequest;
     protected _notifyLogout: boolean;

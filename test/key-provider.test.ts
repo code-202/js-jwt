@@ -1,6 +1,6 @@
 import { test, expect, afterAll, beforeAll } from '@jest/globals'
-import { KeyProvider } from '../src/key-provider'
-import { SPKIBuilder, Key } from '../src/key-builder'
+import { KeyProvider } from '../build/key-provider'
+import { SPKIBuilder } from '../build/key-builder'
 
 const spki = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2RbCZIlcKwCOS4dnvt2i
